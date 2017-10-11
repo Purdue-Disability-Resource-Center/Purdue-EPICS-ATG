@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ATG</string>
+    <string name="hello_epics">Hello EPICS!</string>
+    <string name="latitude_word">Latitude: </string>
+    <string name="longitude_word">Longitude: </string>
+    <string name="identity">Purdue EPICS DRC: ATG Debug</string>
+    <string name="GPS_word">GPS:</string>
+    <string name="GPS_state_active">ACTIVE</string>
+    <string name="GPS_state_inactive">INACTIVE</string>
+    <string name="GPS_state_need_permission">NEED PERMISSION</string>
+</resources>
