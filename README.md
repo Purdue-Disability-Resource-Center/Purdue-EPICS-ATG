@@ -2,7 +2,7 @@ Hello! Welcome to Purdue EPICS DRC. This is the ATG Android app.
 
 Things to do
 
-- [ ] Create dummy classes for FileSystem and AudioStream handling
+- [x] Create dummy classes for FileSystem and AudioStream handling
 - [ ] Branch project for Xiao and Joseph
 - [ ] Complete filesystem functions
 - [ ] Complete audio stream functions
