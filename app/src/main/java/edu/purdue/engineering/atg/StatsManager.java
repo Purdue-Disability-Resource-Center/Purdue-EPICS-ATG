@@ -11,7 +11,7 @@ import com.google.android.gms.location.LocationResult;
  * Created by Joseph Gerardot on 10/1/17.
  */
 
-public class StatsManager {
+class StatsManager {
     static final int GPS_ACTIVE = 0;
     static final int GPS_INACTIVE = 1;
     static final int GPS_NEED_PERMISSION = 2;
