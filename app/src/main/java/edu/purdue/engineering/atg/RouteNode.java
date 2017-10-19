@@ -3,6 +3,9 @@ package edu.purdue.engineering.atg;
 import android.location.Location;
 import android.net.Uri;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
+import java.util.Scanner;
 
 /**
  * Created by joseph on 10/11/17.
@@ -33,8 +36,7 @@ class RouteNode {
 
         while(mask != 0B0011) {
             if (((mask & 0B0001) != 0B0001) && (files[i].getName().equals(LOCATION_NAME))) { //if we haven't found a location and this file has the right name
-                loc = parseLocation(files[i]); //get the location
-                rad = parseRadius(files[i]); //get the radius
+                parseNode(files[i]);
                 mask += LOC_FOUND;
             }
 
@@ -63,11 +65,22 @@ class RouteNode {
         return sound;
     }
 
-    private Location parseLocation(File file) {
-        return null; //TODO: What format are the text files with radius and location in? Placeholder
+    private void parseNode(File file) {
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+        }
+        catch(FileNotFoundException e) {
+            throw new InvalidParameterException("File not found!");
+        }
+
+
+        loc = new Location("ATG"); //empty string because this location was made up
+        loc.setLatitude(scanner.nextDouble()); //try to get the three numbers? Idk if this works either.
+        loc.setLongitude(scanner.nextDouble()); //Need to see format. Also probably catch IOexceptions here
+
+        rad = scanner.nextDouble();
+
     }
 
-    private double parseRadius(File file) {
-        return 10; //TODO: figure out how this really works. Placeholder
-    }
 }
