@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.instantapps.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -155,8 +154,10 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             ResolvableApiException resolvable = (ResolvableApiException) e; //change type of exception
                             resolvable.startResolutionForResult(MainActivity.this, 2); //ask Android to bring up the dialog to change. Check this line if there are problems.
-                        } catch (IntentSender.SendIntentException sendEx) {
-                        } //ignore if it fails
+                        }
+                        catch (IntentSender.SendIntentException sendEx) {
+                        MainActivity.this.stats.updateGPSState(StatsManager.GPS_NEED_PERMISSION);
+                        }
                         break;
                     }
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:

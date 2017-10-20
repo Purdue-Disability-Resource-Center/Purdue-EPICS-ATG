@@ -1,6 +1,9 @@
 package edu.purdue.engineering.atg;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.File;
 
 
@@ -9,12 +12,12 @@ import java.io.File;
  * Class RoutePtr represents a pointer to a single route in the routes directory. Holds onto the directory pointer and a Uri to the description sound file
  */
 
-class RoutePtr {
-    public final String ROUTE_DESC_NAME = "desc.mp3"; //constant for name of description file
+class RoutePtr implements Parcelable{
+    private final String ROUTE_DESC_NAME = "desc.mp3"; //constant for name of description file
     private File dir; //the directory in which this route resides
     private Uri desc; //the URI to the description MP3
 
-    public RoutePtr(File d) {
+    RoutePtr(File d) {
         dir = d;
         File[] files = dir.listFiles(); //directory with this route
 
@@ -26,6 +29,11 @@ class RoutePtr {
 
         }
 
+    }
+
+    private RoutePtr(File file, Uri uri) { //constructor for unparceling.
+        dir = file;
+        desc = uri;
     }
 
     public RouteNode[] getRouteNodes() {
@@ -47,4 +55,27 @@ class RoutePtr {
     public Uri getDesc() { //return the MP3 file describing this route. For convenience. No playMP3 method because I think that would hang the UI on the other end.
         return desc;
     }
+
+    /*------------------------ Parcelable Implementation -----------------------------*/
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{dir.toString(), desc.toString()});
+    }
+
+    public final Parcelable.Creator<RoutePtr> CREATOR = new Parcelable.Creator<RoutePtr>() {
+        public RoutePtr createFromParcel(Parcel in) {
+            String[] strings = in.createStringArray();
+            return new RoutePtr(new File(strings[0]), Uri.parse(strings[1]));
+        }
+
+        public RoutePtr[] newArray(int size) {
+            return new RoutePtr[size];
+        }
+    };
+
+
 }
