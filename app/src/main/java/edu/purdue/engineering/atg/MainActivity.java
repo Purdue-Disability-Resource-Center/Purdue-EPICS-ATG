@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private volatile boolean requestingLocationUpdates = false;
     private volatile boolean permissions_ready = false;
+    private boolean isInForeground = false;
 
     private FusedLocationProviderClient locator;
     private LocationRequest locationRequest;
@@ -54,13 +55,8 @@ public class MainActivity extends AppCompatActivity {
         //TODO: create the route window
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Thread thread = new Thread(){
-                public void run(){
+                    initLocationServices();
                     permissions_ready = true;
-                    MainActivity.this.initLocationServices();
-                }
-            };
-            thread.start();
         }
         else {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION);
@@ -75,12 +71,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startGPS();
+        isInForeground = true;
 
     }
 
     protected void onPause() {
         super.onPause();
         stopGPS();
+        isInForeground = false;
 
     }
 
@@ -96,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case(MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION):
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissions_ready = true;
                     initLocationServices();
+                    permissions_ready = true;
+                    if(isInForeground)
+                        MainActivity.this.onResume();
+
                 }
                 else{
                     stats.updateGPSState(StatsManager.GPS_NEED_PERMISSION);
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        startGPS();
+
     }
 
 
