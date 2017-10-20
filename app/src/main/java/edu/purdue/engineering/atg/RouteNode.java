@@ -14,8 +14,8 @@ import java.util.Scanner;
  */
 
 class RouteNode {
-    public final String LOCATION_NAME = ".txt";
-    public final String SOUND_NAME = ".mp3";
+    public final String LOCATION_NAME = "node.txt";
+    public final String SOUND_NAME = "sound.mp3";
 
     private Location loc;
     private double rad;
