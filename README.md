@@ -6,6 +6,7 @@ Things to do
 - [x] Branch project for Xiao and Joseph
 - [x] Complete filesystem functions
 - [x] Complete audio stream functions
-- [ ] Build routeNavigate activity
-- [ ] Merge routeNavigate branch with implemented FileManager class, and media playback techniques
-- [ ] Build routeMenu interface, implement it to pass intent for new routeNavigate
+- [x] Build routeNavigate activity
+- [x] Merge routeNavigate branch with implemented FileManager class, and media playback techniques
+- [x] Build routeMenu interface, implement it to pass intent for new routeNavigate
+- [ ] Fix issue where ATG will talk over itself if user moves in/out of screen

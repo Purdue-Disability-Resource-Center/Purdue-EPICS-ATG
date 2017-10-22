@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private volatile boolean requestingLocationUpdates = false;
     private volatile boolean location_permissions_ready = false;
+    private volatile boolean file_permissions_ready = false;
     private boolean isInForeground = false;
 
     private FusedLocationProviderClient locator;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             initFileManager();
-
+            file_permissions_ready = true;
         }
         else {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         super.onResume();
         startGPS();
         isInForeground = true;
-        setCurrentRoute(fileManager.getRoute());
+        if(file_permissions_ready)
+            setCurrentRoute(fileManager.getRoute());
 
     }
 
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case(MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE):
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initFileManager();
-
+                    file_permissions_ready = true;
                 }
                 else {
                     this.finish(); //cheekily exit
