@@ -3,6 +3,7 @@ package edu.purdue.engineering.atg;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -28,6 +29,7 @@ import com.google.android.gms.tasks.Task;
 public class MainActivity extends AppCompatActivity {
 
     final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 0;
+    final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     private StatsManager stats;
 
     private volatile boolean requestingLocationUpdates = false;
@@ -170,6 +172,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void beginRoute(RoutePtr ptr) {
+        startActivity( new Intent(this, RouteNavigateLaunch.class)
+                .putExtra("stats", stats)
+                .putExtra("route", ptr)
+        );
+
+    }
 
 
 }

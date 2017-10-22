@@ -38,15 +38,13 @@ class RoutePtr implements Parcelable{
 
     public RouteNode[] getRouteNodes() {
         File[] files = dir.listFiles();
-        RouteNode[] nodes = new RouteNode[files.length];
+        RouteNode[] nodes = new RouteNode[files.length-1];
 
-        for(int i = 0; i < nodes.length; i++) {
-            if(files[i].isDirectory()) { //if the file is a directory
-                nodes[i] = new RouteNode(files[i]); //make it a new routeNode in the array
+        for(int i = 0, k = 0; i < nodes.length; i++) {
+            if(files[k].isDirectory()) { //if the file is a directory
+                nodes[i] = new RouteNode(files[k]); //make it a new routeNode in the array
             }
-            else { //anything else just makes a hole in the array. Set up later interpreters to ignore these.
-                nodes[i] = null;
-            }
+            k++;
         }
 
         return nodes;
@@ -54,6 +52,10 @@ class RoutePtr implements Parcelable{
 
     public Uri getDesc() { //return the MP3 file describing this route. For convenience. No playMP3 method because I think that would hang the UI on the other end.
         return desc;
+    }
+
+    public String getName() {
+        return dir.getName();
     }
 
     /*------------------------ Parcelable Implementation -----------------------------*/

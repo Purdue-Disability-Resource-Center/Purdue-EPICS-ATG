@@ -3,6 +3,7 @@
     package="edu.purdue.engineering.atg">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".RouteNavigateLaunch" android:exported="false">
+            <action android:name=".ROUTE_NAVIGATE_LAUNCH"/>
+        </activity>
+
+        <service android:name=".RouteNavigate" android:exported="false">
+            <action android:name=".ROUTE_NAVIGATE"/>
+        </service>
+
     </application>
 
 </manifest>

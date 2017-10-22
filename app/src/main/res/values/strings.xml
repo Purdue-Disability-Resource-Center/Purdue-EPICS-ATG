@@ -8,4 +8,6 @@
     <string name="GPS_state_active">ACTIVE</string>
     <string name="GPS_state_inactive">INACTIVE</string>
     <string name="GPS_state_need_permission">NEED PERMISSION</string>
+    <string name="route_navigate_notification_title">ATG Navigation</string>
+    <string name="route_navigate_notification_content">Navigating on route: </string>
 </resources>

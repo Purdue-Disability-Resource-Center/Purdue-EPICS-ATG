@@ -75,7 +75,7 @@ class RouteNode {
         }
 
 
-        loc = new Location("ATG"); //empty string because this location was made up
+        loc = new Location("ATG");
         loc.setLatitude(scanner.nextDouble()); //try to get the three numbers? Idk if this works either.
         loc.setLongitude(scanner.nextDouble()); //Need to see format. Also probably catch IOexceptions here
 
