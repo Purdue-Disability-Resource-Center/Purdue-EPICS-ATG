@@ -68,7 +68,7 @@ class RoutePtr implements Parcelable{
         dest.writeStringArray(new String[]{dir.toString(), desc.toString()});
     }
 
-    public final Parcelable.Creator<RoutePtr> CREATOR = new Parcelable.Creator<RoutePtr>() {
+    public static final Parcelable.Creator<RoutePtr> CREATOR = new Parcelable.Creator<RoutePtr>() {
         public RoutePtr createFromParcel(Parcel in) {
             String[] strings = in.createStringArray();
             return new RoutePtr(new File(strings[0]), Uri.parse(strings[1]));

@@ -1,6 +1,5 @@
 package edu.purdue.engineering.atg;
 
-import android.*;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -30,7 +29,6 @@ import java.io.IOException;
 public class RouteNavigate extends Service {
 
     private RoutePtr route;
-    private NotificationChannel channel;
     private Notification notification;
     private LocationRequest locationRequest;
     private RouteNode[] nodes;
@@ -42,7 +40,7 @@ public class RouteNavigate extends Service {
         return null; //might be bindable at some point, to return debug data
     }
 
-    @TargetApi(26)
+
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
         route = intent.getParcelableExtra("route");
@@ -50,12 +48,8 @@ public class RouteNavigate extends Service {
         callback = new RouteLocationCallback();
         locator = LocationServices.getFusedLocationProviderClient(this);
 
-        channel = new NotificationChannel("routeNavigate","ATG Navigation", NotificationManager.IMPORTANCE_DEFAULT);
 
-        NotificationManager notificationManager = (NotificationManager)(getSystemService(Context.NOTIFICATION_SERVICE));
-        notificationManager.createNotificationChannel(channel);
-
-        notification = new Notification.Builder(this,"routeNavigate")
+        notification = new Notification.Builder(this)
                 .setContentTitle(getText(R.string.route_navigate_notification_title))
                 .setContentText(getText(R.string.route_navigate_notification_content) + route.getName())
                 .build();

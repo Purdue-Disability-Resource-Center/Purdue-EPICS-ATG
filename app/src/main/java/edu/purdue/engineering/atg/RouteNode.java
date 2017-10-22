@@ -44,12 +44,11 @@ class RouteNode {
                 sound = Uri.fromFile(files[i]); //get the Uri for the sound
                 mask += SOUND_FOUND;
             }
-            i++;
             if(i >= files.length) //if we've reached the end without finding the files we want
                 throw new IllegalArgumentException(
                         "Route waypoint directory does not contain necessary files!"
                 );
-
+            i++;
         }
     }
 

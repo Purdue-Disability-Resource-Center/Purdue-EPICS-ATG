@@ -10,7 +10,6 @@ import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.GestureDetector;
@@ -71,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         gestureDetector = new GestureDetector(this,this);
 
         routeMenu = (TextView)findViewById(R.id.main_route_display_name);
+
+        /*NotificationChannel channel = new NotificationChannel("routeNavigate","ATG Navigation", NotificationManager.IMPORTANCE_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager)(getSystemService(Context.NOTIFICATION_SERVICE));
+        notificationManager.createNotificationChannel(channel);*/
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     initLocationServices();

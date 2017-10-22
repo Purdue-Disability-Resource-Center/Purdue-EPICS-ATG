@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 /**
  * Created by joseph on 10/20/17.
@@ -38,7 +39,7 @@ public class RouteNavigateLaunch extends AppCompatActivity {
 
         stats.setLayout((LinearLayout)findViewById(R.id.route_navigate_layout));
 
-        locator = new FusedLocationProviderClient(this);
+        locator = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = new LocationRequest()
                 .setInterval(5000)

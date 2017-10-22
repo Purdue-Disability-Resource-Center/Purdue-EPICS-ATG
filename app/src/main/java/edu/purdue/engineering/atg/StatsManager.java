@@ -33,6 +33,10 @@ class StatsManager implements Parcelable {
             baseTexts[i] = b[i].getText().toString();
         }
 
+        initLocationCallback();
+    }
+
+    private void initLocationCallback() {
         statsLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -86,7 +90,7 @@ class StatsManager implements Parcelable {
         out.writeStringArray(baseTexts);
     }
 
-    public final Parcelable.Creator<StatsManager> CREATOR = new Parcelable.Creator<StatsManager>() {
+    public static final Parcelable.Creator<StatsManager> CREATOR = new Parcelable.Creator<StatsManager>() {
 
         public StatsManager[] newArray(int size) {
             return new StatsManager[size];
@@ -103,6 +107,7 @@ class StatsManager implements Parcelable {
             throw new IllegalArgumentException("Not enough strings to build stats manager!");
         baseTexts = texts;
         fields = new TextView[texts.length];
+        initLocationCallback();
 
     }
 
