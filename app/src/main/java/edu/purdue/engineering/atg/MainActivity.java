@@ -18,7 +18,7 @@ import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private FusedLocationProviderClient locator;
     private LocationRequest locationRequest;
+    private GestureDetector gestureDetector;
 
     @Override @TargetApi(26)
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         (TextView)findViewById(R.id.GPS_state_text)
                 }
         );
+
+        gestureDetector = new GestureDetector(this,this);
 
         routeMenu = (TextView)findViewById(R.id.main_route_display_name);
 
@@ -246,7 +249,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     /*-------------------------- Gesture Handlers -----------------------------*/
-
+    public boolean onTouchEvent(MotionEvent e) {
+        gestureDetector.onTouchEvent(e);
+        return super.onTouchEvent(e);
+    }
     public boolean onDown(MotionEvent e) {
         return true;
     }
@@ -257,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     public void onLongPress(MotionEvent e) {
+
     }
 
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distancex, float distancey) {
