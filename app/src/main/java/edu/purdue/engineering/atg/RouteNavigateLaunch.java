@@ -54,13 +54,13 @@ public class RouteNavigateLaunch extends AppCompatActivity {
             locationPermissions = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         else
             locationPermissions = true;
-
+        startService(routeIntent);
 
     }
 
     public void onStart() {
         super.onStart();
-        startService(routeIntent);
+
     }
 
     public void onResume() {
@@ -75,11 +75,11 @@ public class RouteNavigateLaunch extends AppCompatActivity {
 
     public void onStop() {
         super.onStop();
-        stopService(routeIntent);
     }
 
     public void onDestroy() {
         super.onDestroy();
+        stopService(routeIntent);
     }
 
     private void startGPS() {
