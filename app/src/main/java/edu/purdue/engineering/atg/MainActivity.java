@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,9 +35,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, TextToSpeech.OnInitListener {
 
     final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 0;
     final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -43,10 +47,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private StatsManager stats;
     private FileManager fileManager;
     private TextView routeMenu;
+    private TextToSpeech speaker;
 
     private volatile boolean requestingLocationUpdates = false;
     private volatile boolean location_permissions_ready = false;
     private volatile boolean file_permissions_ready = false;
+    private volatile boolean speaker_ready = false;
     private boolean isInForeground = false;
 
     private FusedLocationProviderClient locator;
@@ -74,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         /*NotificationChannel channel = new NotificationChannel("routeNavigate","ATG Navigation", NotificationManager.IMPORTANCE_DEFAULT);
 
         NotificationManager notificationManager = (NotificationManager)(getSystemService(Context.NOTIFICATION_SERVICE));
-        notificationManager.createNotificationChannel(channel);*/
+        notificationManager.createNotificationChannel(channel);*/ // I really have no clue what Android wants me to do with this stuff
+
+        speaker = new TextToSpeech(this,this);
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     initLocationServices();
@@ -227,19 +235,38 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     private void playDesc(RoutePtr ptr) {
-        MediaPlayer player = new MediaPlayer();
-        try {
-            player.setDataSource(this, ptr.getDesc());
-            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    mediaPlayer.start();
-                }
-            });
-            player.prepareAsync();
+        Uri content = ptr.getDesc();
+        File file = new File(content.getPath());
+        String name = file.getName();
+        if(name.substring(name.length()-5,name.length()-1).equals(".mp3")) {
+            MediaPlayer player = new MediaPlayer();
+            try {
+                player.setDataSource(this, content);
+                player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mediaPlayer) {
+                        mediaPlayer.start();
+                    }
+                });
+                player.prepareAsync();
+            } catch (IOException e) {
+                //TODO: how do we want to handle these? Won't be so bad if it's just silent
+            }
         }
-        catch(IOException e) {
-            //TODO: how do we want to handle these? Won't be so bad if it's just silent
+        else {
+            if(speaker_ready)
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    byte[] data = new byte[(int) file.length()];
+                    fis.read(data);
+                    if(Build.VERSION.SDK_INT > 21 )
+                        speaker.speak(new String(data, "UTF-8"), TextToSpeech.QUEUE_FLUSH, null, "description");
+                    else
+                        speaker.speak(new String(data, "UTF-8"), TextToSpeech.QUEUE_FLUSH,null);
+                }
+                catch (IOException e) {
+                    //don't do anything. they messed up
+                }
         }
     }
 
@@ -282,4 +309,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         nextRoute();
         return true;
     }
+
+    //-------------------------- TexttoSpeech Interface ----------------------------
+
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS)
+            speaker_ready = true;
+
+
+    }
+
+
 }

@@ -14,6 +14,7 @@ import java.io.File;
 
 class RoutePtr implements Parcelable{
     private final String ROUTE_DESC_NAME = "desc.mp3"; //constant for name of description file
+    private final String ROUTE_SPEECH_NAME = "desc.txt";
     private File dir; //the directory in which this route resides
     private Uri desc; //the URI to the description MP3
 
@@ -22,7 +23,7 @@ class RoutePtr implements Parcelable{
         File[] files = dir.listFiles(); //directory with this route
 
         for(int i = 0;i < files.length;i++) { //find the description file
-            if(files[i].getName().equals(ROUTE_DESC_NAME) && files[i].isFile()) { // don't us == here, it doesn't work with strings well
+            if((files[i].getName().equals(ROUTE_DESC_NAME) || files[i].getName().equals(ROUTE_SPEECH_NAME)) && files[i].isFile()) { // don't us == here, it doesn't work with strings well
                 desc = Uri.fromFile(files[i]); //set desc to be the URI to the description file. DON'T try File.toURI() here. Gets into a weird fight with java.io.URI and android.net.Uri
                 i = files.length;
             }
