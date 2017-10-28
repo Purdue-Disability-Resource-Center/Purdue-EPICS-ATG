@@ -16,6 +16,7 @@ import java.util.Scanner;
 class RouteNode {
     public final String LOCATION_NAME = "node.txt";
     public final String SOUND_NAME = "sound.mp3";
+    public final String SPEECH_NAME = "speech.txt";
 
     private Location loc;
     private double rad;
@@ -40,7 +41,7 @@ class RouteNode {
                 mask += LOC_FOUND;
             }
 
-            if(((mask & 0B0010) != 0B0010) && (files[i].getName().equals(SOUND_NAME))){ //if we haven't found a sound, and this file has the right name
+            if(((mask & 0B0010) != 0B0010) && (files[i].getName().equals(SOUND_NAME) || files[i].getName().equals(SPEECH_NAME))){ //if we haven't found a sound, and this file has the right name
                 sound = Uri.fromFile(files[i]); //get the Uri for the sound
                 mask += SOUND_FOUND;
             }

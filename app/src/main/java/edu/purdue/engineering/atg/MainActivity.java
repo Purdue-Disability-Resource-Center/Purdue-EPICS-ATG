@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         Uri content = ptr.getDesc();
         File file = new File(content.getPath());
         String name = file.getName();
-        if(name.substring(name.length()-5,name.length()-1).equals(".mp3")) {
+        if(name.substring(name.length()-4).equals(".mp3")) {
             MediaPlayer player = new MediaPlayer();
             try {
                 player.setDataSource(this, content);
