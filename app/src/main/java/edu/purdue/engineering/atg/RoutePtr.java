@@ -41,11 +41,12 @@ class RoutePtr implements Parcelable{
         File[] files = dir.listFiles();
         RouteNode[] nodes = new RouteNode[files.length-1];
 
-        for(int i = 0, k = 0; i < nodes.length; i++) {
+        for(int i = 0, k = 0; k < files.length; k++) {
             if(files[k].isDirectory()) { //if the file is a directory
                 nodes[i] = new RouteNode(files[k]); //make it a new routeNode in the array
+                i++;
             }
-            k++;
+
         }
 
         return nodes;
