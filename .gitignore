@@ -8,3 +8,13 @@
 /captures
 .externalNativeBuild
 *.apk
+*.pdf
+*.aux
+*.dvi
+*.bbl
+*.bcf
+*.aux
+*.blg
+*.out
+*.log
+*.run.xml
