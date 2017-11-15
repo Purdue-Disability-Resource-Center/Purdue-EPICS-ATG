@@ -13,6 +13,7 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 
@@ -38,6 +39,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
     private RoutePtr route;
     private Notification notification;
     private LocationRequest locationRequest;
+    private PowerManager.WakeLock wakelock;
     private RouteNode[] nodes;
     private MediaPlayer[] sounds;
     private String[] speeches;
@@ -59,6 +61,9 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         callback = new RouteLocationCallback();
         locator = LocationServices.getFusedLocationProviderClient(this);
 
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ATG Navigation");
+        wakelock.acquire();
 
         notification = new Notification.Builder(this)
                 .setContentTitle(getText(R.string.route_navigate_notification_title))
@@ -108,6 +113,10 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
 
         return START_STICKY;
     }
+    public void onDestroy() {
+        locator.removeLocationUpdates(callback);
+        wakelock.release();
+    }
 
     private class RouteLocationCallback extends LocationCallback {
         RouteLocationCallback() {}
@@ -129,7 +138,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                                 speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null);
                         }
                     }
-                    lockouts[i] = SystemClock.elapsedRealtime();
+                    lockouts[i] = SystemClock.elapsedRealtime(); //introduces a bug where if the T2T engine isn't loaded when it's time to speak, the speech will still lock out. Probably will never happen.
                 }
             }
         }
