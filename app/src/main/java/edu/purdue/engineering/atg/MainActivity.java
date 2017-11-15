@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         isInForeground = false;
 
     }
-/** Called when app goes fully offscreen. Simply calls {@ super.onStop()} */
+/** Called when app goes fully offscreen. Simply calls {@code super.onStop()} */
     protected void onStop() {
        super.onStop();             // I don't think we need to do anything in here
     }
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 /** Starts the GPS functionality of the main screen. Has its own check for permissions, so it can simply be called without regard. Will
  *  not do anything if the GPS is already registered, or if permissions are not enabled. 
- *  @see #MainActivity.stopGPS()
+ *  @see #stopGPS()
  */
     private void startGPS() {
         if(location_permissions_ready && !requestingLocationUpdates) {
@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
     }
 /** Stops GPS operation. Has similar checks to {@code startGPS()}.
- *  @see #MainActivity.startGPS()
+ *  @see #startGPS()
  */
     private void stopGPS() {
         if(location_permissions_ready && requestingLocationUpdates) {
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityx, float velocityy) {
         return true;
     }
-/** {@code GestureDetector} handler for a long press. Indicates selection of the current route. Calls {@link beginRoute(RoutePtr) beginRoute}
+/** {@code GestureDetector} handler for a long press. Indicates selection of the current route. Calls {@link #beginRoute(RoutePtr) beginRoute}
  *  @param e The {@code MotionEvent} representing the input. Not actually used in this method.
  *  @see #beginRoute(RoutePtr)
  */

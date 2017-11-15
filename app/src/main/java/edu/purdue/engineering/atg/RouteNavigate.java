@@ -13,6 +13,7 @@ import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,12 +33,15 @@ import java.io.IOException;
 
 public class RouteNavigate extends Service implements TextToSpeech.OnInitListener {
 
+    final long LOCKOUT_TIME = 45000;
+
     private RoutePtr route;
     private Notification notification;
     private LocationRequest locationRequest;
     private RouteNode[] nodes;
     private MediaPlayer[] sounds;
     private String[] speeches;
+    private long[] lockouts;
     private RouteLocationCallback callback;
     private FusedLocationProviderClient locator;
     private TextToSpeech speaker;
@@ -58,7 +62,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
 
         notification = new Notification.Builder(this)
                 .setContentTitle(getText(R.string.route_navigate_notification_title))
-                .setContentText(getText(R.string.route_navigate_notification_content) + route.getName())
+                .setContentText(getText(R.string.route_navigate_notification_content) + route.getName()) //doesn't work at all. Idk why and it's not really important to the project
                 .build();
 
         startForeground(1, notification);
@@ -68,6 +72,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         nodes = route.getRouteNodes();
         sounds = new MediaPlayer[nodes.length];
         speeches = new String[nodes.length];
+        lockouts = new long[nodes.length];
         File file;
         for(int i = 0;i < nodes.length;i++) {
             file = new File(nodes[i].getSound().getPath());
@@ -113,7 +118,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
             Location userLoc = locationResult.getLastLocation();
 
             for(int i = 0;i < nodes.length;i++) {
-                if(userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) {
+                if((userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) && (SystemClock.elapsedRealtime() - lockouts[i] < LOCKOUT_TIME)) {
                     if (sounds[i] != null)
                         sounds[i].start(); //the line that controls it all
                     else {
@@ -124,6 +129,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                                 speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null);
                         }
                     }
+                    lockouts[i] = SystemClock.elapsedRealtime();
                 }
             }
         }
