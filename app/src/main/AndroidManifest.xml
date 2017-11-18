@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.purdue.engineering.atg">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -13,22 +13,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".RouteSelect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".RouteNavigateLaunch" android:exported="false">
-            <action android:name=".ROUTE_NAVIGATE_LAUNCH"/>
+        <activity
+            android:name=".RouteNavigateLaunch"
+            android:exported="false">
+            <action android:name=".ROUTE_NAVIGATE_LAUNCH" />
         </activity>
 
-        <service android:name=".RouteNavigate" android:exported="false">
-            <action android:name=".ROUTE_NAVIGATE"/>
+        <service
+            android:name=".RouteNavigate"
+            android:exported="false">
+            <action android:name=".ROUTE_NAVIGATE" />
         </service>
 
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
