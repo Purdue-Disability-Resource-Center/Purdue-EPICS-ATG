@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         isInForeground = false;
 
     }
-/** Called when app goes fully offscreen. Simply calls {@ super.onStop()} */
+/** Called when app goes fully offscreen. Simply calls {@code super.onStop()} */
     protected void onStop() {
        super.onStop();             // I don't think we need to do anything in here
     }
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 /** Starts the GPS functionality of the main screen. Has its own check for permissions, so it can simply be called without regard. Will
  *  not do anything if the GPS is already registered, or if permissions are not enabled. 
- *  @see #MainActivity.stopGPS()
+ *  @see stopGPS()
  */
     private void startGPS() {
         if(location_permissions_ready && !requestingLocationUpdates) {
