@@ -43,7 +43,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
     private RouteNode[] nodes;
     private MediaPlayer[] sounds;
     private String[] speeches;
-    private long[] lockouts;
+    private double[] lockouts;
     private RouteLocationCallback callback;
     private FusedLocationProviderClient locator;
     private TextToSpeech speaker;
@@ -77,7 +77,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         nodes = route.getRouteNodes();
         sounds = new MediaPlayer[nodes.length];
         speeches = new String[nodes.length];
-        lockouts = new long[nodes.length];
+        lockouts = new double[nodes.length];
         File file;
         for(int i = 0;i < nodes.length;i++) {
             file = new File(nodes[i].getSound().getPath());
@@ -133,7 +133,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                     else {
                         if(speaker_ready) {
                             if (Build.VERSION.SDK_INT > 21)
-                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null, "routenavigation");
+                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null, "routenavigation"); //the other two lines that control it all
                             else
                                 speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null);
                         }

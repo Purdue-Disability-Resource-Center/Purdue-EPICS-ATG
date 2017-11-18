@@ -15,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setSupportActionBar((Toolbar) findViewById(R.id.mainToolBar));
         stats = new StatsManager(                                   // pass the layout and its text fields into a new StatsManager
                 (LinearLayout)findViewById(R.id.statsLayout),       // This will be used to hold onto and update the stats on the screen
                 new TextView[]{(TextView)findViewById(R.id.identifier_text),
