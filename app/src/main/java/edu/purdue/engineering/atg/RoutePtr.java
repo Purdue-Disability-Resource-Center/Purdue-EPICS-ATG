@@ -5,6 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -59,6 +61,16 @@ class RoutePtr implements Parcelable{
     public String getName() {
         return dir.getName();
     }
+
+    public static RouteNode[] concatRoutes(ArrayList<RoutePtr> routes) {
+        ArrayList<RouteNode> nodes = new ArrayList<>();
+        for(RoutePtr r : routes) {
+            nodes.addAll(Arrays.asList(r.getRouteNodes()));
+        }
+        return nodes.toArray(new RouteNode[0]);
+    }
+
+
 
     /*------------------------ Parcelable Implementation -----------------------------*/
     @Override

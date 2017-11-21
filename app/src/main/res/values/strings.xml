@@ -11,4 +11,15 @@
     <string name="route_navigate_notification_title">ATG Navigation</string>
     <string name="route_navigate_notification_content">Navigating on route: </string>
     <string name="route_menu_text">Current route: </string>
+
+    <string name="main_screen_title">Welcome to the Purdue Automated Tour Guide! Swipe the screen left or right to change options. Press the screen to select the current option.</string>
+    <string name="settings_screen_title">Swipe left or right to cycle through the settings options. Press the screen to toggle an option on or off. </string>
+    <string name="current_option">Current Option: </string>
+    <string name="press_to_proceed_to">Press the screen to proceed to </string>
+    <string name="toggled">Toggled: </string>
+    <string name="is_currently">is currently </string>
+    <string name="off">off </string>
+    <string name="on">on </string>
+    
+
 </resources>

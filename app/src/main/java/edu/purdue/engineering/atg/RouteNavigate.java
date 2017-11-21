@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -27,6 +28,8 @@ import com.google.android.gms.vision.text.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by joseph on 10/20/17.
@@ -53,11 +56,12 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         return null; //might be bindable at some point, to return debug data
     }
 
-
+    @TargetApi(16)
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
-        route = intent.getParcelableExtra("route");
         locationRequest = intent.getParcelableExtra("locationRequest");
+        //intent.setExtrasClassLoader(RoutePtr.class.getClassLoader());
+        route = intent.getParcelableExtra("route");
         callback = new RouteLocationCallback();
         locator = LocationServices.getFusedLocationProviderClient(this);
 
@@ -73,8 +77,10 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         startForeground(1, notification);
 
         speaker = new TextToSpeech(this,this);
-
-        nodes = route.getRouteNodes();
+        ArrayList<RoutePtr> routes = new ArrayList<>();
+        routes.add(route);
+        addStatics(routes);
+        nodes = RoutePtr.concatRoutes(routes);
         sounds = new MediaPlayer[nodes.length];
         speeches = new String[nodes.length];
         lockouts = new double[nodes.length];
@@ -144,6 +150,19 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         }
     }
 
+    private void addStatics(ArrayList<RoutePtr> routes) {
+        File staticsDir = new File(Environment.getExternalStorageDirectory() + File.separator + RouteSelect.ROUTES_DIRECTORY + File.separator + "static");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File(staticsDir,"settings.txt"));
+        } catch (IOException e) {
+            throw new SecurityException("Couldn't read settings file!");
+        }
+        while(scanner.hasNext()) {
+            routes.add(new RoutePtr(new File(staticsDir,scanner.next())));
+        }
+        scanner.close();
+    }
     //------------------------------- TexttoSpeech interface ---------------------------
 
     public void onInit(int status) {

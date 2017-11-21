@@ -43,7 +43,7 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
 
     final int MY_PERMISSIONS_REQUEST_READ_FINE_LOCATION = 0;
     final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
-    final String ROUTES_DIRECTORY = "ATG";
+    static final String ROUTES_DIRECTORY = "ATG";
 
     private StatsManager stats;
     private FileManager fileManager;
@@ -71,7 +71,8 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
         setSupportActionBar((Toolbar) findViewById(R.id.routeSelectToolBar));
         stats = new StatsManager(                                   // pass the layout and its text fields into a new StatsManager
                 (LinearLayout)findViewById(R.id.statsLayout),       // This will be used to hold onto and update the stats on the screen
-                new TextView[]{(TextView)findViewById(R.id.identifier_text),
+                new TextView[]{
+                        (TextView)findViewById(R.id.identifier_text),
                         (TextView)findViewById(R.id.latitude_text),
                         (TextView)findViewById(R.id.longitude_text),
                         (TextView)findViewById(R.id.GPS_state_text)
@@ -108,7 +109,7 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
 /** Initialization of the {@code FileManager}. Not safe to call unless app is known to have external file permissions. */
     private void initFileManager() {
         fileManager = new FileManager(
-                new File(Environment.getExternalStorageDirectory().getPath()+ "/" + ROUTES_DIRECTORY) //should be the directory with routes
+                new File(Environment.getExternalStorageDirectory().getPath()+ File.separator + ROUTES_DIRECTORY) //should be the directory with routes
         );
     }
 /** Called when the app needs to start up processes before coming onscreen. Simply calls {@code super}. */
@@ -297,7 +298,7 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
  *  @param route The new current route. Will be displayed on screen and have it's description played.
  */
     private void setCurrentRoute(RoutePtr route) {
-        routeMenu.setText(R.string.route_menu_text + route.getName());
+        routeMenu.setText(getString(R.string.route_menu_text) + route.getName());
         playDesc(route);
     }
 /** Go to the next route and set the current route to the new route. */
