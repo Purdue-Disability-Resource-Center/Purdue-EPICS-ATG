@@ -8,8 +8,8 @@ android {
         applicationId "edu.purdue.engineering.atg"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.1.1"
+        versionCode 4
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
