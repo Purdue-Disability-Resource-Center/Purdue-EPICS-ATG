@@ -139,9 +139,9 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                     else {
                         if(speaker_ready) {
                             if (Build.VERSION.SDK_INT > 21)
-                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null, "routenavigation"); //the other two lines that control it all
+                                speaker.speak(speeches[i], TextToSpeech.QUEUE_ADD, null, "routenavigation"); //the other two lines that control it all
                             else
-                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null);
+                                speaker.speak(speeches[i], TextToSpeech.QUEUE_ADD, null);
                         }
                     }
                     lockouts[i] = SystemClock.elapsedRealtime(); //introduces a bug where if the T2T engine isn't loaded when it's time to speak, the speech will still lock out. Probably will never happen.
