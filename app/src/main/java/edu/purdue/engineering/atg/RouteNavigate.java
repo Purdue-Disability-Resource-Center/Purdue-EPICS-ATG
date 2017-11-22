@@ -133,7 +133,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
             Location userLoc = locationResult.getLastLocation();
 
             for(int i = 0;i < nodes.length;i++) {
-                if((userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) && (SystemClock.elapsedRealtime() - lockouts[i] < LOCKOUT_TIME)) {
+                if((userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) && (SystemClock.elapsedRealtime() - lockouts[i] > LOCKOUT_TIME)) {
                     if (sounds[i] != null)
                         sounds[i].start(); //the line that controls it all
                     else {
