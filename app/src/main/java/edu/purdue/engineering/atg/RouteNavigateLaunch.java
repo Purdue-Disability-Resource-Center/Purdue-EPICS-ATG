@@ -55,8 +55,8 @@ public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReady
         locator = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = new LocationRequest()
-                .setInterval(5000)
-                .setFastestInterval(5000)
+                .setInterval(1000)
+                .setFastestInterval(1000)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         routeIntent = new Intent(this, RouteNavigate.class)
