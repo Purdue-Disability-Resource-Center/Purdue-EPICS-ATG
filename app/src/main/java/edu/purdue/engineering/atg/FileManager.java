@@ -17,7 +17,6 @@ class FileManager {
     }
 
     public RoutePtr getRoute() { //gets the current route
-
         return routes[index];
     }
 
@@ -37,13 +36,13 @@ class FileManager {
 
     private void initRoutes(File dir) {
         File[] routeList = dir.listFiles();
-        routes = new RoutePtr[routeList.length];
-        int i = 0;
+        routes = new RoutePtr[routeList.length-1];
 
-        for(File r : routeList) { //probably want to catch exceptions for "not directory" somewhere. Maybe do that in the RoutPtr constructor
-            routes[i] = new RoutePtr(r);
-            i++;
+        for(int i = 0, j = 0; j < routeList.length-1;i++) {
+            if(!routeList[i].getName().equals("static")) { //don't create a route from the static directory
+                routes[j] = new RoutePtr(routeList[i]);
+                j++;
+            }
         }
-
     }
 }

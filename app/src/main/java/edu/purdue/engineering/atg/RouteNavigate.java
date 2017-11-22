@@ -12,7 +12,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.os.Build;
+import android.os.Environment;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -25,6 +28,8 @@ import com.google.android.gms.vision.text.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by joseph on 10/20/17.
@@ -32,12 +37,16 @@ import java.io.IOException;
 
 public class RouteNavigate extends Service implements TextToSpeech.OnInitListener {
 
+    final long LOCKOUT_TIME = 45000;
+
     private RoutePtr route;
     private Notification notification;
     private LocationRequest locationRequest;
+    private PowerManager.WakeLock wakelock;
     private RouteNode[] nodes;
     private MediaPlayer[] sounds;
     private String[] speeches;
+    private double[] lockouts;
     private RouteLocationCallback callback;
     private FusedLocationProviderClient locator;
     private TextToSpeech speaker;
@@ -47,27 +56,34 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         return null; //might be bindable at some point, to return debug data
     }
 
-
+    @TargetApi(16)
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
-        route = intent.getParcelableExtra("route");
         locationRequest = intent.getParcelableExtra("locationRequest");
+        //intent.setExtrasClassLoader(RoutePtr.class.getClassLoader());
+        route = intent.getParcelableExtra("route");
         callback = new RouteLocationCallback();
         locator = LocationServices.getFusedLocationProviderClient(this);
 
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "ATG Navigation");
+        wakelock.acquire();
 
         notification = new Notification.Builder(this)
                 .setContentTitle(getText(R.string.route_navigate_notification_title))
-                .setContentText(getText(R.string.route_navigate_notification_content) + route.getName())
+                .setContentText(getText(R.string.route_navigate_notification_content) + route.getName()) //doesn't work at all. Idk why and it's not really important to the project
                 .build();
 
         startForeground(1, notification);
 
         speaker = new TextToSpeech(this,this);
-
-        nodes = route.getRouteNodes();
+        ArrayList<RoutePtr> routes = new ArrayList<>();
+        routes.add(route);
+        addStatics(routes);
+        nodes = RoutePtr.concatRoutes(routes);
         sounds = new MediaPlayer[nodes.length];
         speeches = new String[nodes.length];
+        lockouts = new double[nodes.length];
         File file;
         for(int i = 0;i < nodes.length;i++) {
             file = new File(nodes[i].getSound().getPath());
@@ -103,6 +119,10 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
 
         return START_STICKY;
     }
+    public void onDestroy() {
+        locator.removeLocationUpdates(callback);
+        wakelock.release();
+    }
 
     private class RouteLocationCallback extends LocationCallback {
         RouteLocationCallback() {}
@@ -113,22 +133,36 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
             Location userLoc = locationResult.getLastLocation();
 
             for(int i = 0;i < nodes.length;i++) {
-                if(userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) {
+                if((userLoc.distanceTo(nodes[i].getLocation()) < nodes[i].getRadius()) && (SystemClock.elapsedRealtime() - lockouts[i] < LOCKOUT_TIME)) {
                     if (sounds[i] != null)
                         sounds[i].start(); //the line that controls it all
                     else {
                         if(speaker_ready) {
                             if (Build.VERSION.SDK_INT > 21)
-                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null, "routenavigation");
+                                speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null, "routenavigation"); //the other two lines that control it all
                             else
                                 speaker.speak(speeches[i], TextToSpeech.QUEUE_FLUSH, null);
                         }
                     }
+                    lockouts[i] = SystemClock.elapsedRealtime(); //introduces a bug where if the T2T engine isn't loaded when it's time to speak, the speech will still lock out. Probably will never happen.
                 }
             }
         }
     }
 
+    private void addStatics(ArrayList<RoutePtr> routes) {
+        File staticsDir = new File(Environment.getExternalStorageDirectory() + File.separator + RouteSelect.ROUTES_DIRECTORY + File.separator + "static");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(new File(staticsDir,"settings.txt"));
+        } catch (IOException e) {
+            throw new SecurityException("Couldn't read settings file!");
+        }
+        while(scanner.hasNext()) {
+            routes.add(new RoutePtr(new File(staticsDir,scanner.next())));
+        }
+        scanner.close();
+    }
     //------------------------------- TexttoSpeech interface ---------------------------
 
     public void onInit(int status) {

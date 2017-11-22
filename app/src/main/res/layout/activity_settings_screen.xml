@@ -32,15 +32,22 @@
         android:layout_marginStart="8dp">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="@string/main_screen_title" />
+            tools:text="@string/settings_screen_title" />
 
         <TextView
-            android:id="@+id/mainScreenOptionText"
+            android:id="@+id/settingsScreenOptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+        <TextView
+            android:id="@+id/settingsScreenToggleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
