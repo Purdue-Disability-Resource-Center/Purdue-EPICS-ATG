@@ -1,0 +1,57 @@
+\section{Programming for the Android Platform}
+
+\subsection{What is Android?}
+''Android'' as you likely know, is the name of a popular mobile device operating system. It is maintained and published by Google,
+but released as an open spec, available to any manufacturer who wishes to build a device running it.
+
+As a result of this, there exist a
+wide variety of Android devices, and contingent with the continuing support of Google, applications written for the system are 
+extremely platform-independent; that is, code written for Android will run without issue on nearly any Android device, and when it
+does not run, the reason will be extremely clear and uncomplicated to address.
+
+\subsection{Why Android?}
+The reasons why the ATG makes sense as a mobile phone application are somewhat outside the scope of this document, but the issue of
+operating system choice does necessitate some discussion.\par
+First, the Android OS is a far more approachable development environment. Google helpfully offers a free IDE (Integrated Development Environment) to aid ease of development for their system. An IDE is a program that provides an array of tools to write, compile, and debug code, 
+attempting to support your project ''from cradle to grave.'' This IDE is a large part of what makes this project possible, as it provides
+essentially all the tools that we, as students, are incapable of developing for ourselves. In addition to boasting a friendly support
+administration, Android and all its apps are written natively in a very common language: Java. Now, say what you will about interpreted
+languages, but they do make development snappy and quick.\par
+Compare this with IOS, the main competitor one might consider when writing a phone application. The iPhone is a \emph{closed} development
+environment. This means that Apple has made it very hard for anyone not using Apple hardware and some version of OSX to write for their system.
+Technically, it is not impossible. Apple maintains that one can purchase a license for an old version of OSX for cheap, install it with a
+fresh ''manufacturer key,'' and get to work on an IOS app; but it cannot be denied that the support from Apple for non-OSX IOS developers
+is decisively worse than that of Google for Android. An additional consideration is the native language of IOS apps: they're written
+a language called... Swift? Honestly, I had to go look it up. Never heard of it in my life. I don't have any backround with it, and neither
+do I believe have my teammates. Swift doesn't seem to be horribly different from standard C-family languages, but I'm certain it is different
+enough to be a stumbling block. Overall, I wouldn't oppose the development of ATG for Android, but to do so would be beyond my skills.
+
+\subsection{The Structure of an Android App}
+From this section onward I shall assume that the reader has some elementary programming knowledge. If you find the next sections confusing
+or encounter too many unknown words, it is advisable to read and work some introductory lessons in the Java programming language.
+The ''Resources'' section at the end of this manual shall contain pointers to helpful references.\cite{javaOracle}
+
+Every Android application is composed first and foremost of \verb|Activity|s. An \verb|Activity| is a developer-defined Java class which extends the 
+Android API class \verb|Activity|. In order to do this, one must override all of \verb|Activity|'s abstract methods in the child class, implementing them
+to actually do the things one wants the app to do. Specifically, there are five methods where one's code will be run:
+
+\begin{enumerate}
+\item{\verb|onCreate()|}
+\item{\verb|onStart()|}
+\item{\verb|onResume()|}
+\item{\verb|onPause()|}
+\item{\verb|onDestroy()|}
+\end{enumerate}
+
+Google's Android API documentation explains these far better than I might, so I shall simply direct you there. The important thing for our
+purposes is that programming an application of any type is somewhat different than the programming one might learn in introductory classes.
+
+\subsection{Asynchronous Programming}
+On a phone, website, or any system more complicated than an introductory programming tutorial, code does not run in a single linear order.
+The Android system will call the app's functions when it has decided the time is right. As such, when writing code, one must be constantly
+aware of \emph{when} and \emph{where} the code will actually execute. Everything is implemented in terms of \emph{callbacks}, functions which
+are called to adress specific circumstances. So, for example, when Android wants to load the app, it will look into our app code and find
+the function \verb|onCreate()|, and will call that function, expecting that we have implemented that method to create our app. Thus, inside
+the \verb|onCreate()| method, we should only do things that create the app in preparation for running, and nothing else. Otherwise, 
+the code we write will be executed in unpredictable circumstances and will be very hard to debug and maintain. Asynchronous programming is
+a fundamental concept in application programming. 
