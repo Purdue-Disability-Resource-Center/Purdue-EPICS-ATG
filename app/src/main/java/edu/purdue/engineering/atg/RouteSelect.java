@@ -306,6 +306,10 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
         setCurrentRoute(fileManager.proceedRoute());
     }
 
+/** Go the the last route the set the current route to the new route */
+    private void backroute() {
+        setCurrentRoute(fileManager.backRoute());
+    }
     /*-------------------------- Gesture Handlers -----------------------------*/
 /** Handler for when app recieves any {@code TouchEvent}. Immediately passes to {@code GestureDetector}
  *  @param e The {@code MotionEvent} to be handled.
@@ -320,6 +324,10 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
     }
 
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityx, float velocityy) {
+        if( velocityx > 0 )
+            nextRoute();
+        else
+            backroute();
         return true;
     }
 /** {@code GestureDetector} handler for a long press. Indicates selection of the current route. Calls {@link #beginRoute(RoutePtr) beginRoute}
@@ -342,7 +350,6 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
  *  @see #nextRoute()
  */
     public boolean onSingleTapUp(MotionEvent e) {
-        nextRoute();
         return true;
     }
 
