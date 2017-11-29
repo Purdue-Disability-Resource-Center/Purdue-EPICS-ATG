@@ -20,3 +20,8 @@
 *.log
 *.run.xml
 *.toc
+*.swp
+*.html
+*.css
+*.js
+*.gradle
