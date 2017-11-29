@@ -1,0 +1,51 @@
+\section{Routes}
+\subsection{What is a Route?}
+The entire ATG revolves around routes, so it's worth spending some time to define what they are. In essence, a route is simply a list of
+points, and radii around them. The legacy ATG uses a linked-list of points, where the points on the route are ordered. Programming it this way
+had the unfortunate side-effect that the ATG would only be watching for the next point on the route, so if a user accidentally skipped one,
+or the GPS didn't pick it up, the ATG would be unable to respond to any more points until the user walked back and hit the first one.
+In programming the new ATG phone application, we've solved this by removing the idea that the points even have an order. The app now simply
+checks every point in the route on every location update.
+
+Having discussed the routes, it's simple to define what's in each point (or \emph{node}, as they will now be called.). The node needs to be
+centered at a location, so it has a latitude and longitude, and it needs a radius to define how large of a circle it represents.
+
+\subsection{Node Formatting}
+The newest format for a node saves this data inside a .txt file, on the first line, separated by spaces. For example, to represent a node at
+latitude 60, longitude 30, and with radius of seven meters, node.txt would look like:
+\begin{verabatim}
+60 30 7
+\end{verbatim}
+Importantly, the node.txt file can contain more data without causing issues. The latitude, longitude, and radius simply need to be the first
+three numbers to appear in the file. In addition, there is an odd issue with the way Java handles floating-points, where specifying too much
+precision will in any of the numbers will cause a crash. In order to prevent this, one should never write more than 12 decimal places
+(10^-12) in the numbers for this file.
+
+The other thing needed for every point in a route is a description: the instructions to give when the user is at that place. In the current
+format, this is saved as plaintext in a file called ``speech.txt.'' Writing the description is a simple as opening up that file and 
+transcribing what the device should say.
+
+\subsection{Route Formatting}
+Both of the above files compose a \emph{node}, the logical atom in a route. The current route format puts each node in its own subdirectory
+on the Android filesystem. A route, then, is simply a subdirectory containing subdirectories, with a single file ``desc.txt,'' to hold the
+description of the route itself for the selection screen. All the routes on a phone are contained in one top-level directory in the
+Android External Storage drive, called ATG. Thus, the filesystem for a phone with ATG properly installed would look like so:'
+\begin{verbatim}
+ATG
+|--route1
+|--route2
+	|--desc.txt
+	|--node1
+	|--node2
+	|--node3
+	|--node4
+	|--node5
+		|--node.txt
+		|--speech.txt
+|--route3
+|--route4
+|--static
+	|--staticroute1
+	|--staticroute2
+\end{verbatim}
+
