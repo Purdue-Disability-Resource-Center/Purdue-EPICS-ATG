@@ -31,5 +31,15 @@ breaks the app down into a set of \verb|Activity|s and \verb|Service|s. Recall t
 and display to the screen, and a \verb|Service| is a chunk of code that can be launched and will do processing without displaying to the 
 screen.
 
-Every Android application has a \verb|MainActivity|, which is automatically loaded by Android at when the user requests the app be opened. 
-In the case of our application, this the menu selection screen. 
+Every Android application has a \verb|MainActivity|, which is automatically loaded by Android when the user requests the app be opened. 
+In the case of our application, this the menu selection screen. The menu selection screen then passes an \verb|Intent| when it comes time to launch the next screen.
+This \verb|Intent| contains information for the Android operating system to know what thing to launch, and it can also have extra information passed along with it.
+To start an \verb|Activity| named \verb|Test.class|, for example, one would use the following:
+\begin{verbatim}
+startActivity(new Intent(this, Text.class);
+\end{verbatim}
+All the screens of the application are accessed in this way.
+
+Beyond simply opening screens, however, the app needs to accept user input for all the menus. This is accomplished by the use of the \verb|GestureDetector| class.
+All the screens which accept user input simply initialize a \verb|GestureDetector| and overload their \verb|onMotionEvent| to pass the \verb|MotionEvent| to it.
+
