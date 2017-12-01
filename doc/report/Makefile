@@ -1,6 +1,4 @@
-ATGAndroidReport.pdf: ATGAndroidReport.tex ATGAndroidReport.bbl
-	pdflatex ATGAndroidReport.tex
-	pdflatex ATGAndroidReport.tex
-
-ATGAndroidReport.bbl:
+ATGAndroidReport.pdf: ATGAndroidReport.tex section*
 	biber ATGAndroidReport
+	pdflatex ATGAndroidReport.tex
+	pdflatex ATGAndroidReport.tex
