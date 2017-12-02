@@ -1,0 +1,58 @@
+\section{User Manual}
+Use of the ATG application is intended to be fairly intuitive, but as with everything, explict instructions are necessary. If in doubt, don't 
+be afraid to simply restart the application, and remember to delete the settings.txt in the static folder if static routes are added or
+removed.
+\subsection{General Tips}
+Some general guidelines for using the Android ATG application:
+\begin{itemize}
+\item{All menus in in the app use a system where left and right swipes navigate between options, and a long press anywhere on the screen
+selects the current option.}
+\item{Every menu option and operation should also output some audio, instructing the user as to what happened and how to proceed. If you do
+something and don't hear anything, it didn't work.}
+\item{The app is dependent on having the phone directory structure set up correctly. If experiencing issues, the first thing to check is
+whether that directory has been changed in any way.}
+\item{If crashes continue after a correction of the directory structure, the next thing is to get the Android crash logs. For this, one
+needs either a third-party app or developer. Such a case would be a good time to bring the app back to the ATG team.}
+\item{The app requests location data from Android every one second, but there's no guarantee it actually gets a result every second. In worse
+conditions, the app might now respond to location data very quickly, or at all. If it receives data that Android believes is inaccurate, the
+user will be warned and no further instructions will be given until connectivity is restored.}
+\end{itemize}
+\subsection{Installing Routes}
+In order to load routes to a phone, one needs access to the phone's internal storage directory. The route should come in the form of folder,
+and is likely sitting on the filesystem on a PC. In order to put the route on the phone, all that is necessary is to plug the Android phone 
+into the computer, open the Android filesystem from the computer, and drag the route into the folder labeled ``ATG'' on the phone. If this
+folder does not exist, create it.
+
+\subsubsection{Static Routes}
+It is also possible to install a route as \emph{static}. This means the route will not be in the normal route selection menu. Instead, it will
+become an option, enableable in the settings menu, and if enabled it will be loaded whenever navigation is happening. In order to install a 
+route as static, one must perform a similar process as the installation of a normal route, except instead of placing the route folder in
+the ``ATG'' directory, the route folder must be place in the ``static'' directory, which is inside the ``ATG'' directory. If removing or adding
+routes to the ``static'' directory, one should delete the file ``settings.txt.'' The ATG will regenerate this file when it is restarted, and
+the user will need to revisit the settings to put the settings once more the way the user wants them. Refer to the section
+on the ATG filesystem if this is confusing or unclear. 
+
+\subsection{Application Structure}
+In order to navigate backwards from any screen in the app, the user should simply press the Android phone's back button.
+\subsubsection{Main Screen}
+The main screen is the one loaded immediately when the app is launched. This reads the user the disclaimer, and provides a simple menu to
+select between going to the settings screen, and to the route selection screen. As always, swipe right and left to browse the options and 
+press the screen to select the current one.
+
+\subsubsection{Settings Screen}
+The settings screen is accessible from the main screen, and allows the user to toggle which static routes are active or inactive. This
+set of options will be dynamically populated with the routes in the ``static'' folder, so there's no need to do anything further than drop
+the routes into that folder. All options default to active, but user selections are persistent between app instances, so there's no need to
+reset the options every time, unless the ``static'' directory has changed. If this is the case, the ``settings.txt'' should have been deleted,
+and the settings will need to be reset within the app.
+
+\subsubsection{Route Selection Screen}
+The route selection screen is the screen allowing the user to choose the route on which to navigate. It reads off the name of the current
+route, and reads off each new route as it is swiped to, again in a left/right system. The user presses the screen to select a route and begin
+navigating on it. This screen also includes some debug information for ATG team and DRC users, but it shouldn't trouble the average user.
+
+\subsubsection{Route Navigation Screen}
+The route navigation screen is shown when the user is actually navigating on a route. The navigation tracking is actually run as a backround
+service, so there should be no need to app open on the screen or even to keep the phone open at all, although keeping the phone open
+\emph{might} improve performance. The screen, though, does output some debug information and displays a map with pins at all the route points,
+both for novelty and debugging.
