@@ -38,8 +38,20 @@ To start an \verb|Activity| named \verb|Test.class|, for example, one would use 
 \begin{verbatim}
 startActivity(new Intent(this, Text.class);
 \end{verbatim}
-All the screens of the application are accessed in this way.
+All the screens of the application are accessed in this way. For a more complete
 
+\subsection{User Interface}
 Beyond simply opening screens, however, the app needs to accept user input for all the menus. This is accomplished by the use of the \verb|GestureDetector| class.
 All the screens which accept user input simply initialize a \verb|GestureDetector| and overload their \verb|onMotionEvent| to pass the \verb|MotionEvent| to it.
 
+In order to use \verb|GestureDetector|, one needs to implement the entire interface \verb|onGestureListener|. However, this app communicates with the user entirely through
+left/right swipes and long presses of the screen. This means most of other types of input are unnecessary, so they have methods which do nothing. Implementing the methods, 
+however, is required to stop the compiler from yelling at us. 
+
+To maintain track of which item is currently selected, the screens with menus simply intialize a member array of the options and an index integer, and increment/decrement the
+index on the appropriate user input. For convience, they all have a display update method to communicate the change to the user.
+
+For more information on user interface in the Android Environment, see the references.\cite{gestureDetector}
+
+\subsection{Location Services}
+The core of the application is, of course, Google Location Services.
