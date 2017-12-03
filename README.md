@@ -9,4 +9,5 @@ Things to do
 - [x] Build routeNavigate activity
 - [x] Merge routeNavigate branch with implemented FileManager class, and media playback techniques
 - [x] Build routeMenu interface, implement it to pass intent for new routeNavigate
-- [ ] Fix issue where ATG will talk over itself if user moves in/out of screen
+- [x] Fix issue where ATG will talk over itself if user moves in/out of screen
+- [ ] Deliver the project
