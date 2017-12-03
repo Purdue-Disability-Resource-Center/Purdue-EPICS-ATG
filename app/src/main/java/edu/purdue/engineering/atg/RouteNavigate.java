@@ -61,7 +61,6 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
         locationRequest = intent.getParcelableExtra("locationRequest");
-        //intent.setExtrasClassLoader(RoutePtr.class.getClassLoader());
         route = intent.getParcelableExtra("route");
         callback = new RouteLocationCallback();
         locator = LocationServices.getFusedLocationProviderClient(this);
