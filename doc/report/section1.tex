@@ -15,7 +15,7 @@ operating system choice does necessitate some discussion.\par
 First, the Android OS is a far more approachable development environment. Google helpfully offers a free IDE (Integrated Development Environment) to aid ease of development for their system. An IDE is a program that provides an array of tools to write, compile, and debug code, 
 attempting to support your project ''from cradle to grave.'' This IDE is a large part of what makes this project possible, as it provides
 essentially all the tools that we, as students, are incapable of developing for ourselves. In addition to boasting a friendly support
-administration, Android and all its apps are written natively in a very common language: Java. Now, say what you will about interpreted
+administration, Android and all its apps are written natively in a very common language: Java. Say what you will about interpreted
 languages, but they do make development snappy and quick.\par
 Compare this with IOS, the main competitor one might consider when writing a phone application. The iPhone is a \emph{closed} development
 environment. This means that Apple has made it very hard for anyone not using Apple hardware and some version of OSX to write for their system.
@@ -43,7 +43,7 @@ to actually do the things one wants the app to do. Specifically, there are five 
 \item{\verb|onDestroy()|}
 \end{enumerate}
 
-Google's Android API documentation explains these far better than I might, so I shall simply direct you there. The important thing for our
+Google's Android API documentation explains these far better than I might, so I shall simply direct you there.\cite{androidRefIndex} The important thing for our
 purposes is that programming an application of any type is somewhat different than the programming one might learn in introductory classes.
 
 \subsection{Asynchronous Programming}
@@ -55,3 +55,43 @@ the function \verb|onCreate()|, and will call that function, expecting that we h
 the \verb|onCreate()| method, we should only do things that create the app in preparation for running, and nothing else. Otherwise, 
 the code we write will be executed in unpredictable circumstances and will be very hard to debug and maintain. Asynchronous programming is
 a fundamental concept in application programming. 
+
+\subsection{Android Services, Permissions, and the Manifest}
+Most services and utilities on Android are initialized and accessed in a fairly standard Java way, so in that aspect they are easy. However, many things an application might
+wish to do are restricted by Android permissions controls; to surpass this, the programmer must follow some fairly specific guidelines on the use of permissions-protected 
+functionality. Failure to do this will generally cause the app to crash and burn in a pile of unhandled \verb|SecurityException|s. More information on this topic may be found
+in the Android Devloper Resources.\cite{androidPermissions}
+
+\subsubsection{Manifest Permissions}
+First, if the app needs to use functionality guarded by permission controls, it must declare so in it's \verb|AndroidManifest| file. This is a .xml file declaring a bunch of
+things about the app, but the important point here is that outside the \verb|application| element of the file must be a line declaring that the app \verb|uses-permission|
+followed by some valid permission. For example, if the app needs access to fine location data (like the ATG) then one of the permission lines will appear as:
+\begin{verbatim}
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+\end{verbatim}
+On older versions of Android, this is all which is needed to acquire permissions. Unfortunately for deveopers, though, Google has taken a more progressivist stance on
+permissions in newer editions. Originally, the manifest would declare a permission, and the user would be forced to grant all required permissions at install-time. However,
+Android switched to a dynamic permissions system, where users can see what permissions an app requires at install-time, but don't necessarily grant them until runtime. This
+means that all modern Android app code must check first whether the version of Android is new enough to use dynamic permissions, then if the user has already granted the
+appropriate permission. If this check fails, the app must request the appropriate permissions and then implement a callback to receive the results and update the app state
+appropriately. 
+
+\subsubsection{Checking Permissions}
+An app may check its own permissions with the \verb|checkSelfPermissions| method. This takes a \verb|Context| and \verb|Permission| value as arguments, and returns
+a value from \verb|PackageManager| as to whether the system has granted the permission. So, code to check whether the system has fine location permissions would read:
+\begin{minted}[breaklines]{java}
+if(ContextCompat.checkSelfPermission(this, 
+	Manifest.permission.ACCESS_FINE_LOCATION) == 
+	PackageManager.PERMISSION_GRANTED) {
+                   //do permissions-required stuff or set flags here 
+        }
+\end{minted}
+In the ATG app, flags are set to track whether permissions have been gained. So the inside of the above code block would be as simple as setting the flag to true and calling
+the initialization method.
+
+\subsubsection{Requesting Permissions}
+However, not all is fine and dandy. At least once in an app's lifetime, it won't have the requested permissions. In that case, it must request the permissions. However, the 
+request will not be handled synchronously, as it requires a user prompt. Thus, an app must override \verb|onPermissionsRequestResult| in order to receive the result.
+This is something of an involved process, which is better explained by the Android documentation, but I'll at least give the citation to the
+developer resources on the subject.\cite{androidPermissions}
+

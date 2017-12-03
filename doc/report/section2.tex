@@ -1,4 +1,4 @@
-\section{Application Structure}
+\section{Program Structure}
 
 Having now a cursory knowledge about how an Android app works, we can discuss what the ATG actually is, programmatically.
 \subsection{ATG: The Basic Structure}
@@ -35,9 +35,9 @@ Every Android application has a \verb|MainActivity|, which is automatically load
 In the case of our application, this the menu selection screen. The menu selection screen then passes an \verb|Intent| when it comes time to launch the next screen.
 This \verb|Intent| contains information for the Android operating system to know what thing to launch, and it can also have extra information passed along with it.
 To start an \verb|Activity| named \verb|Test.class|, for example, one would use the following:
-\begin{verbatim}
+\begin{minted}{java}
 startActivity(new Intent(this, Text.class);
-\end{verbatim}
+\end{minted}
 All the screens of the application are accessed in this way. For a more complete
 
 \subsection{User Interface}
@@ -54,4 +54,52 @@ index on the appropriate user input. For convience, they all have a display upda
 For more information on user interface in the Android Environment, see the references.\cite{gestureDetector}
 
 \subsection{Location Services}
-The core of the application is, of course, Google Location Services.
+The core of the application is, of course, Google Location Services. All the screens which deal with any location data work throughn this API, specifically by creating a
+\verb|FusedLocationProvider| then then requesting location updates.
+
+\subsubsection{The FusedLocationProviderClient}
+The the \verb|FusedLocationProviderClient| is the key to all location services on Android. It is called ``Fused'' because it represents a fusion of location data from the GPS,
+cell service, and wifi nodes. The \verb|FusedLocationProviderClient| handles this calculation entirely on its own, so all the programmer must do is call the methods to use it.
+Unfortunately, the process is still somewhat complicated. The Android discussion on location-aware apps can help with any details not dicussed in this document.\cite{googleLocationServices}
+
+\subsubsection{Initializing Location Services}
+Before any location services can be used at all, the API must be initialized. It's fine to simply do this in the main screen and assume the later screens will follow, unless
+the app includes any trickery with intent filters.
+
+Issues related to permissions were covered in previous sections, but location services has a special extra layer of settings manipulation. In order to even use location
+services at all, the app must have the correct permissions. However, in order for location data to actually come out correct, the user must set location settings in a way
+that allows the app to operate. In the end, this means one must create a \verb|LocationSettingsRequest| and submit it to a checking method, and then pass a request for
+resolution if it fails. This is again a rather tedious ordeal, so refer to the Android developer documentation for a better explanation.\cite{googleLocationServices}
+Here is a working code block from app.
+\begin{minted}[breaklines]{java}
+locationRequest.setInterval(1000);       //setup for how fast we can receive locations. chosen arbitrarily
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); //tell Google we want the best data
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder() //get a package of all our location settings requests
+                .addLocationRequest(locationRequest);
+        SettingsClient client = LocationServices.getSettingsClient(this);               //get a client for the current settings on the phone
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build()); //create a new task checking if the two are compatible
+
+
+        task.addOnFailureListener(this, new OnFailureListener() { //listen if task fails, and handle if it does
+            @Override
+            public void onFailure(@NonNull Exception e) {           //switch to deal with different errors
+                int statusCode = ((ApiException) e).getStatusCode();
+                switch (statusCode) {
+                    case CommonStatusCodes.RESOLUTION_REQUIRED: { //in this case, need to ask user to change settings for us
+                        try {
+                            ResolvableApiException resolvable = (ResolvableApiException) e; //change type of exception
+                            resolvable.startResolutionForResult(RouteSelect.this, 2); //ask Android to bring up the dialog to change. Check this line if there are problems.
+                        }
+                        catch (IntentSender.SendIntentException sendEx) {
+                        RouteSelect.this.stats.updateGPSState(StatsManager.GPS_NEED_PERMISSION);
+                        }
+                        break;
+                    }
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        break;
+
+
+                }
+\end{minted}

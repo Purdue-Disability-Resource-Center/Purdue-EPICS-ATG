@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{if}\PYG{o}{(}\PYG{n}{ContextCompat}\PYG{o}{.}\PYG{n+na}{checkSelfPermission}\PYG{o}{(}\PYG{k}{this}\PYG{o}{,}
+	\PYG{n}{Manifest}\PYG{o}{.}\PYG{n+na}{permission}\PYG{o}{.}\PYG{n+na}{ACCESS\PYGZus{}FINE\PYGZus{}LOCATION}\PYG{o}{)} \PYG{o}{==}
+	\PYG{n}{PackageManager}\PYG{o}{.}\PYG{n+na}{PERMISSION\PYGZus{}GRANTED}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                   \PYG{c+c1}{//do permissions\PYGZhy{}required stuff or set flags here}
+        \PYG{o}{\PYGZcb{}}
+\end{Verbatim}

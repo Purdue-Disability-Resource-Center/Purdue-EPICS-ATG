@@ -29,7 +29,9 @@ transcribing what the device should say.
 Both of the above files compose a \emph{node}, the logical atom in a route. The current route format puts each node in its own subdirectory
 on the Android filesystem. A route, then, is simply a subdirectory containing subdirectories, with a single file ``desc.txt,'' to hold the
 description of the route itself for the selection screen. All the routes on a phone are contained in one top-level directory in the
-Android External Storage drive, called ATG. Thus, the filesystem for a phone with ATG properly installed would look like so:\vspace{.1pt}
+Android External Storage drive, called ATG. Thus, the filesystem for a phone with ATG properly installed would look like \ref{ATGtree}.
+\begin{Tree}
+\caption{A properly configured ATG filesystem.}\label{ATGtree}
 \dirtree{%
 .0 ATG.
 .1 route1.
@@ -51,4 +53,41 @@ Android External Storage drive, called ATG. Thus, the filesystem for a phone wit
 		.3 node1.
 		.3 node2.
 }
+\end{Tree}
 
+\subsection{Route Creation}
+It is hardly ever necessary, however, for one to create a route using the format alone. Several tools are available which aid the process of route creation. The best of them isthe Online Route Creator, available \href{https://epics.ecn.purdue.edu/drc/routeCreator.html}{here}. As a backup, there is a Python script available to convert routes from 
+Excel files into ATG format. This isn't really the advised way to create routes, but it does exist if there are problems with the online route creator.
+
+\subsubsection{Online Route Creation}
+The Online Route Creator is, again, available \href{https://epics.ecn.purdue.edu/drc/routeCreator.html}{here}. In order to use it, one simply clicks on the displayed map to
+create points, and clicks on the created pins or their entries in the node list in order to edit the description information. Then, one simply clicks the ``download'' button
+in order to download the route. It will download as a .zip archive and must be unzipped before installing on the phone. 
+
+In addition, it is possible to upload a route one has already downloaded for revision. To do this, one simply zips the route file and sends it up using the ``upload'' button on
+the site. The route can then be edited and downloaded as normal.
+
+\subsubsection{Python Route Creation}
+As above, there is a Python script which can create routes as well, from nodes stored in Excel files. If one wishes to use this, one must first create a Excel file in the
+proper format. The first cell (A1) of the first sheet will be interpreted as the description text. After that, every row has then latitude, longitude, radius, and description
+text of the node, in that order. Obviously these are in different cells, to they occupy columns 1-4. The latitude and longitude should be in degrees, and the radius in meters.
+Below is a working Excel route.\par
+\begin{tabular}{|c|c|c|c|}
+	\hline
+	Route Description & & & \\ \hline
+	1.0 & 1.0 & 10.0 & First node description \\ \hline
+	2.0 & 3.0 & 10.0 & Second node description \\ \hline
+	4.0 & 5.0 & 10.0 & Third node description \\ 
+	\hline
+\end{tabular}\par
+When run through the Python script, this will create a route with three nodes, at the lat/long points specified, and with radius 10 and the descriptions typed in the relevant
+cells.
+
+To run the script, one must first install Python. This is incredibly tedious on Windows, so I won't bother with it here. Once installed, one simply invokes the Python
+executable and submits the filename of the Excel file as an argument. Python will create a new folder to hold the route, which will be named route[FILENAME]. For example, if
+the Excel file were named ``myroute.xlsx'' then the corresponding command to create the route would be
+\begin{minted}{bash}
+python buildRoute.py myroute.xlsx
+\end{minted}
+The output would be placed in a new folder called ``routemyroute.'' Note that this command must be run from the directory in which the Excel file is stored. This means the 
+buildRoute.py file should also be in this directory.

@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{startActivity}\PYG{o}{(}\PYG{k}{new} \PYG{n}{Intent}\PYG{o}{(}\PYG{k}{this}\PYG{o}{,} \PYG{n}{Text}\PYG{o}{.}\PYG{n+na}{class}\PYG{o}{);}
+\end{Verbatim}

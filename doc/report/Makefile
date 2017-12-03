@@ -1,4 +1,4 @@
 ATGAndroidReport.pdf: ATGAndroidReport.tex section*
+	pdflatex --shell-escape ATGAndroidReport.tex
 	biber ATGAndroidReport
-	pdflatex ATGAndroidReport.tex
-	pdflatex ATGAndroidReport.tex
+	pdflatex --shell-escape ATGAndroidReport.tex

@@ -1,0 +1,32 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{locationRequest}\PYG{o}{.}\PYG{n+na}{setInterval}\PYG{o}{(}\PYG{l+m+mi}{1000}\PYG{o}{);}       \PYG{c+c1}{//setup for how fast we can receive locations. chosen arbitrarily}
+        \PYG{n}{locationRequest}\PYG{o}{.}\PYG{n+na}{setFastestInterval}\PYG{o}{(}\PYG{l+m+mi}{1000}\PYG{o}{);}
+        \PYG{n}{locationRequest}\PYG{o}{.}\PYG{n+na}{setPriority}\PYG{o}{(}\PYG{n}{LocationRequest}\PYG{o}{.}\PYG{n+na}{PRIORITY\PYGZus{}HIGH\PYGZus{}ACCURACY}\PYG{o}{);} \PYG{c+c1}{//tell Google we want the best data}
+
+        \PYG{n}{LocationSettingsRequest}\PYG{o}{.}\PYG{n+na}{Builder} \PYG{n}{builder} \PYG{o}{=} \PYG{k}{new} \PYG{n}{LocationSettingsRequest}\PYG{o}{.}\PYG{n+na}{Builder}\PYG{o}{()} \PYG{c+c1}{//get a package of all our location settings requests}
+                \PYG{o}{.}\PYG{n+na}{addLocationRequest}\PYG{o}{(}\PYG{n}{locationRequest}\PYG{o}{);}
+        \PYG{n}{SettingsClient} \PYG{n}{client} \PYG{o}{=} \PYG{n}{LocationServices}\PYG{o}{.}\PYG{n+na}{getSettingsClient}\PYG{o}{(}\PYG{k}{this}\PYG{o}{);}               \PYG{c+c1}{//get a client for the current settings on the phone}
+        \PYG{n}{Task}\PYG{o}{\PYGZlt{}}\PYG{n}{LocationSettingsResponse}\PYG{o}{\PYGZgt{}} \PYG{n}{task} \PYG{o}{=} \PYG{n}{client}\PYG{o}{.}\PYG{n+na}{checkLocationSettings}\PYG{o}{(}\PYG{n}{builder}\PYG{o}{.}\PYG{n+na}{build}\PYG{o}{());} \PYG{c+c1}{//create a new task checking if the two are compatible}
+
+
+        \PYG{n}{task}\PYG{o}{.}\PYG{n+na}{addOnFailureListener}\PYG{o}{(}\PYG{k}{this}\PYG{o}{,} \PYG{k}{new} \PYG{n}{OnFailureListener}\PYG{o}{()} \PYG{o}{\PYGZob{}} \PYG{c+c1}{//listen if task fails, and handle if it does}
+            \PYG{n+nd}{@Override}
+            \PYG{k+kd}{public} \PYG{k+kt}{void} \PYG{n+nf}{onFailure}\PYG{o}{(}\PYG{n+nd}{@NonNull} \PYG{n}{Exception} \PYG{n}{e}\PYG{o}{)} \PYG{o}{\PYGZob{}}           \PYG{c+c1}{//switch to deal with different errors}
+                \PYG{k+kt}{int} \PYG{n}{statusCode} \PYG{o}{=} \PYG{o}{((}\PYG{n}{ApiException}\PYG{o}{)} \PYG{n}{e}\PYG{o}{).}\PYG{n+na}{getStatusCode}\PYG{o}{();}
+                \PYG{k}{switch} \PYG{o}{(}\PYG{n}{statusCode}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                    \PYG{k}{case} \PYG{n}{CommonStatusCodes}\PYG{o}{.}\PYG{n+na}{RESOLUTION\PYGZus{}REQUIRED}\PYG{o}{:} \PYG{o}{\PYGZob{}} \PYG{c+c1}{//in this case, need to ask user to change settings for us}
+                        \PYG{k}{try} \PYG{o}{\PYGZob{}}
+                            \PYG{n}{ResolvableApiException} \PYG{n}{resolvable} \PYG{o}{=} \PYG{o}{(}\PYG{n}{ResolvableApiException}\PYG{o}{)} \PYG{n}{e}\PYG{o}{;} \PYG{c+c1}{//change type of exception}
+                            \PYG{n}{resolvable}\PYG{o}{.}\PYG{n+na}{startResolutionForResult}\PYG{o}{(}\PYG{n}{RouteSelect}\PYG{o}{.}\PYG{n+na}{this}\PYG{o}{,} \PYG{l+m+mi}{2}\PYG{o}{);} \PYG{c+c1}{//ask Android to bring up the dialog to change. Check this line if there are problems.}
+                        \PYG{o}{\PYGZcb{}}
+                        \PYG{k}{catch} \PYG{o}{(}\PYG{n}{IntentSender}\PYG{o}{.}\PYG{n+na}{SendIntentException} \PYG{n}{sendEx}\PYG{o}{)} \PYG{o}{\PYGZob{}}
+                        \PYG{n}{RouteSelect}\PYG{o}{.}\PYG{n+na}{this}\PYG{o}{.}\PYG{n+na}{stats}\PYG{o}{.}\PYG{n+na}{updateGPSState}\PYG{o}{(}\PYG{n}{StatsManager}\PYG{o}{.}\PYG{n+na}{GPS\PYGZus{}NEED\PYGZus{}PERMISSION}\PYG{o}{);}
+                        \PYG{o}{\PYGZcb{}}
+                        \PYG{k}{break}\PYG{o}{;}
+                    \PYG{o}{\PYGZcb{}}
+                    \PYG{k}{case} \PYG{n}{LocationSettingsStatusCodes}\PYG{o}{.}\PYG{n+na}{SETTINGS\PYGZus{}CHANGE\PYGZus{}UNAVAILABLE}\PYG{o}{:}
+                        \PYG{k}{break}\PYG{o}{;}
+
+
+                \PYG{o}{\PYGZcb{}}
+\end{Verbatim}
