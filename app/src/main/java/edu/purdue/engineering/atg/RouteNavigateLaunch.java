@@ -23,7 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
- * Created by joseph on 10/20/17.
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
  */
 
 public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReadyCallback{

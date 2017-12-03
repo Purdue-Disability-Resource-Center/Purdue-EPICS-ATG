@@ -19,6 +19,7 @@ import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Created by joseph on 10/20/17.
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
  */
 
 public class RouteNavigate extends Service implements TextToSpeech.OnInitListener {
@@ -148,6 +149,20 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                 }
             }
         }
+
+        public void onLocationAvailability(LocationAvailability l) {
+            String state;
+            if(l.isLocationAvailable())
+                state = getString(R.string.GPS_acquired);
+            else
+                state = getString(R.string.GPS_lost);
+            if(speaker_ready) {
+                if (Build.VERSION.SDK_INT > 21)
+                    speaker.speak(state, TextToSpeech.QUEUE_ADD, null, "routenavigation");
+                else
+                    speaker.speak(state, TextToSpeech.QUEUE_ADD, null);
+            }
+        }
     }
 
     private void addStatics(ArrayList<RoutePtr> routes) {
@@ -168,6 +183,10 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
     public void onInit(int status) {
         if( status == TextToSpeech.SUCCESS)
             speaker_ready = true;
+        if(Build.VERSION.SDK_INT > 21)
+            speaker.speak(getString(R.string.now_navigating_on) + route.getName(),TextToSpeech.QUEUE_ADD,null,"ATG Settings");
+        else
+            speaker.speak(getString(R.string.now_navigating_on) + route.getName(),TextToSpeech.QUEUE_ADD,null);
     }
 
 }

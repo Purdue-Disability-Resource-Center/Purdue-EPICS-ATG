@@ -1,5 +1,9 @@
 package edu.purdue.engineering.atg;
 
+/**
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
+ */
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -20,10 +24,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ServiceConfigurationError;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener, TextToSpeech.OnInitListener {
-    protected final String openingSpeech = "Welcome to the Purdue DRC Automated Tour Guide. Other disclaimer stuff here.";
     protected Intent[] options;
     protected String[] screenOptions;
     protected String speechStem = "Press the screen to proceed to ";
@@ -41,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        } else {
+            SettingsFixer settingsFixer = new SettingsFixer(); //spawn a thread to check directories and settings and fix bad settings
+            settingsFixer.start();
         }
         speaker = new TextToSpeech(this,this);
         gestureDetector = new GestureDetector(this,this);
@@ -48,8 +53,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         options = new Intent[] {new Intent(this, RouteSelect.class), new Intent(this, SettingsScreen.class)};
         screenOptions = new String[] {"Route selection", "Settings"};
         screenOption.setText(getString(R.string.current_option) + screenOptions[index]);
-        SettingsFixer settingsFixer = new SettingsFixer(); //spawn a thread to check directories and settings and fix bad settings
-        settingsFixer.start();
+
     }
 
     protected void onStart() {
@@ -74,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         switch (requestCode) {
             case 1:
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    speaker_ready = true;
-                    speak(openingSpeech);
+                    SettingsFixer settingsFixer = new SettingsFixer(); //spawn a thread to check directories and settings and fix bad settings
+                    settingsFixer.start();
                 }
                 else {
                     this.finish();
@@ -85,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private void speak(String speech) {
         if(speaker_ready) {
             if(Build.VERSION.SDK_INT > 21)
-                speaker.speak(speech,TextToSpeech.QUEUE_FLUSH,null,"Main ATG Screen");
+                speaker.speak(speech,TextToSpeech.QUEUE_ADD,null,"Main ATG Screen");
             else
-                speaker.speak(speech,TextToSpeech.QUEUE_FLUSH,null);
+                speaker.speak(speech,TextToSpeech.QUEUE_ADD,null);
         }
     }
 
@@ -156,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public void onInit(int status) {
         if(status == TextToSpeech.SUCCESS)
             speaker_ready = true;
+        speak(getString(R.string.disclaimer));
+        speak(getString(R.string.now_at_main_screen));
     }
 
 }

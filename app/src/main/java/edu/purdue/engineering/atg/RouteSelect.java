@@ -1,5 +1,7 @@
 package edu.purdue.engineering.atg;
-
+/**
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
+ */
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -358,7 +360,10 @@ public class RouteSelect extends AppCompatActivity implements GestureDetector.On
     public void onInit(int status) {
         if(status == TextToSpeech.SUCCESS)
             speaker_ready = true;
-
+        if(Build.VERSION.SDK_INT > 21)
+            speaker.speak(getString(R.string.now_at_route_selection_screen),TextToSpeech.QUEUE_ADD,null,"ATG Settings");
+        else
+            speaker.speak(getString(R.string.now_at_route_selection_screen),TextToSpeech.QUEUE_ADD,null);
 
     }
 

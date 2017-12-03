@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ATG</string>
+    <string name="app_name">EPICS-DRC-ATG</string>
     <string name="hello_epics">Hello EPICS!</string>
     <string name="latitude_word">Latitude: </string>
     <string name="longitude_word">Longitude: </string>
@@ -20,6 +20,14 @@
     <string name="is_currently">is currently </string>
     <string name="off">off </string>
     <string name="on">on </string>
+    <string name="disclaimer">This unit is designed to provide high level information about the Purdue University campus. Buildings. Streets. And cross walks. The device will attempt to lead the user on a preprogrammed tour around the university campus. It is the user s job to physically navigate between the programmed points of interest. While avoiding collisions with vehicles. Pedestrians. Bicycles. And other obstacles. The device is not designed to provide navigational information while inside a building. Since the accuracy of the unit relies on GPS technology. The user will be warned if the GPS signal is lost. Likewise. The user will be notified. When the GPS signal has been re-acquired.
+    </string>
+    <string name="GPS_lost">GPS functionality has been lost.</string>
+    <string name="GPS_acquired">GPS functionality has been acquired.</string>
+    <string name="now_at_main_screen">You are now at the main screen.</string>
+    <string name="now_at_settings_screen">You are now at the settings screen.</string>
+    <string name="now_at_route_selection_screen">You are now at the route selection screen.</string>
+    <string name="now_navigating_on">You are now navigating on route </string>
     
 
 </resources>

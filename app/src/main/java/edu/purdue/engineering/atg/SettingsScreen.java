@@ -1,4 +1,7 @@
 package edu.purdue.engineering.atg;
+/**
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
+ */
 
 import android.os.Build;
 import android.os.Environment;
@@ -187,8 +190,12 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
     //-------------------------- TexttoSpeech Interface ----------------------------//
     /** Handler for when the TexttoSpeech initialization returns. Sets the flag to ready so the other operations can proceed without issue. */
     public void onInit(int status) {
-        if(status == TextToSpeech.SUCCESS)
+        if (status == TextToSpeech.SUCCESS)
             speaker_ready = true;
+        if(Build.VERSION.SDK_INT > 21)
+            speaker.speak(getString(R.string.now_at_settings_screen),TextToSpeech.QUEUE_ADD,null,"ATG Settings");
+        else
+            speaker.speak(getString(R.string.now_at_settings_screen),TextToSpeech.QUEUE_ADD,null);
     }
 
 }

@@ -8,7 +8,7 @@ import java.security.InvalidParameterException;
 import java.util.Scanner;
 
 /**
- * Created by joseph on 10/11/17.
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
  * Class routeNode represents a single waypoint on a route. Holds a Location and Uri for the sound to play at that location.
  *
  */

@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 
 /**
- * Created by joseph on 10/11/17.
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
  * Class RoutePtr represents a pointer to a single route in the routes directory. Holds onto the directory pointer and a Uri to the description sound file
  */
 

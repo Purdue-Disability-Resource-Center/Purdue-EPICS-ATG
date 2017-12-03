@@ -10,7 +10,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 
 /**
- * Created by Joseph Gerardot on 10/1/17.
+ * All code herein is owned by Purdue-EPICS-DRC, and was created by the Fall 2017 team.
  */
 
 class StatsManager implements Parcelable {

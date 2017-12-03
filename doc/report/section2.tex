@@ -103,3 +103,30 @@ locationRequest.setInterval(1000);       //setup for how fast we can receive loc
 
                 }
 \end{minted}
+
+\subsubsection{Using Location Services}
+Once location services are initialized, using them is mostly a simple task. In our app, we want to set ourselves to to receive location updates. The 
+\verb|FusedLocationProvider| has a method for this, so one passes a \verb|LocationRequest| and location callback into the \verb|requestLocationUpdates| method. An example is
+below.
+\begin{minted}[breaklines]{java}
+private void startGPS() {
+        if(location_permissions_ready && !requestingLocationUpdates) {
+              //check if we somehow got here while already requesting location updates
+                try {
+                    locator.requestLocationUpdates(locationRequest, stats.getLocationCallback(), null); //start asking for updates
+                    stats.updateGPSState(StatsManager.GPS_ACTIVE);
+                    requestingLocationUpdates = true;
+                } catch (SecurityException e) {
+                    stats.updateGPSState(StatsManager.GPS_NEED_PERMISSION); //if we don't have permission
+                }
+
+        }
+    }
+\end{minted}
+The request can, of course be removed with a similar method, or modified in various ways.\cite{googleLocationServices}
+
+\subsubsection{API Keys}
+An app needs a valid API key to access any APIs managed by Google. This is essentially a tag tying the the use of Google's services to developers, whom they might charge if
+they use high volume, or at least perform telemetry on. However, for the same reason, the API key for an app should \emph{never} be committed to any online VCS, especially
+one like Github where repositories are public. As such, the Google Maps API key used to build the app is not found anywhere in the version control or documentation. Instead,
+if one wishes to recompile the app, a new API key should be generated on Google's Developer Console.\cite{googleMapsAPIKey}
