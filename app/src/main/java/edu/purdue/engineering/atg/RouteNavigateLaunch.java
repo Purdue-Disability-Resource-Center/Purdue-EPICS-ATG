@@ -37,7 +37,7 @@ public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReady
 
     private boolean requestingLocationUpdates = false;
     private boolean locationPermissions = false;
-
+    /** Create the app */
     @TargetApi(26)
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,43 +63,38 @@ public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReady
                 .putExtra("route", route)
                 .putExtra("locationRequest", locationRequest)
         ;
-        if (Build.VERSION.SDK_INT < 26)
-            locationPermissions = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        else
-            locationPermissions = true;
+        locationPermissions = (Build.VERSION.SDK_INT < 26)||checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
         startService(routeIntent);
-
-
     }
-
+/** Start the app */
     public void onStart() {
         super.onStart();
         map.onStart();
     }
-
+/** Resume the app */
     public void onResume() {
         super.onResume();
         startGPS();
         map.onResume();
     }
-
+/** Pause the app */
     public void onPause() {
         super.onPause();
         stopGPS();
         map.onPause();
     }
-
+/** Stop the app */
     public void onStop() {
         super.onStop();
         map.onStop();
     }
-
+/** Destroy the app */
     public void onDestroy() {
         super.onDestroy();
         stopService(routeIntent);
         map.onDestroy();
     }
-
+/** Start the GPS location updates */
     private void startGPS() {
         if (locationPermissions && !requestingLocationUpdates) {
             try {
@@ -111,7 +106,7 @@ public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReady
         }
 
     }
-
+/** Stop the GPS location updates */
     private void stopGPS() {
         if (locationPermissions && requestingLocationUpdates) {
             try {
@@ -122,19 +117,23 @@ public class RouteNavigateLaunch extends AppCompatActivity implements OnMapReady
 
         }
     }
-
+/** Save the app instance if it is flipped */
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         map.onSaveInstanceState(outState);
     }
-
+/** Handle low memory state */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         map.onLowMemory();
     }
 
+    /** Prepare the Google Map once it is ready
+     *
+     * @param googleMap The map to prepare
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         RouteNode[] nodes = route.getRouteNodes();

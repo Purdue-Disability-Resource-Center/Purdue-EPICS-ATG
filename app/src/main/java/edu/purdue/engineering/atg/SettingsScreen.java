@@ -32,6 +32,7 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
     TextView currentToggle;
     int index = 0;
     @Override
+    /** Create the app */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_screen); //tell android where the layout is
@@ -68,26 +69,26 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
     protected void onDestroy() {
         super.onDestroy();
     }
-
+/** Select the current option */
     protected void selectOption() {
         toggles[index] = !toggles[index];
         showOptionState();
     }
-
+/** Go to the next option */
     protected void nextOption() {
         index++;
         if(index >= statics.length)
             index = 0;
         showOptionState();
     }
-
+/** Go to the last option */
     protected void backOption() {
         index--;
         if(index < 0)
             index = statics.length-1;
         showOptionState();
     }
-
+/** Display the current option state */
     protected void showOptionState() {
         String state;
         if(toggles[index])
@@ -104,6 +105,12 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
         }
     }
 
+    /** Check if a string is inside an array of strings
+     *
+     * @param string the string to look for
+     * @param strings the strings to check against
+     * @return whether the string is in there
+     */
     protected boolean isStringInside(String string, String[] strings) {
         if(strings == null || strings.length == 0)
             return false;
@@ -112,7 +119,7 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
                 return true;
         return false;
     }
-
+/** Write the settings file */
     protected void writeSettings() {
         settingsFile.delete(); //delete the saved file
         FileWriter writer;
@@ -132,6 +139,11 @@ public class SettingsScreen extends AppCompatActivity implements GestureDetector
         }
     }
 
+    /** Get each line from a file as a string, in an array
+     *
+     * @param file The file from which to extract
+     * @return all the lines from the file
+     */
     protected String[] extractLines(File file) {
         ArrayList<String> nameList = new ArrayList<>();
         Scanner scanner;

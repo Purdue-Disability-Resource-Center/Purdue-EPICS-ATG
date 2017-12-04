@@ -22,6 +22,10 @@ class RouteNode {
     private double rad;
     private Uri sound;
 
+    /** Create a new RouteNode from a file pointer
+     *
+     * @param dir The file pointer
+     */
     public RouteNode(File dir) {
         if(!dir.isDirectory())
             throw new IllegalArgumentException(
@@ -55,18 +59,34 @@ class RouteNode {
         }
     }
 
+    /** Get the location of this node
+     *
+     * @return The location of this node
+     */
     public Location getLocation() {
         return loc;
     }
 
+    /** Get the radius of this node
+     *
+     * @return the radius in meters
+     */
     public double getRadius() {
         return rad;
     }
 
+    /** Get the sound to play at this node. Might be a text file
+     *
+     * @return The description file
+     */
     public Uri getSound() {
         return sound;
     }
 
+    /** Parse node data out of a node file
+     *
+     * @param file The node file, probably named "node.txt"
+     */
     private void parseNode(File file) {
         Scanner scanner;
         try {

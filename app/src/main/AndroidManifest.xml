@@ -21,29 +21,34 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".RouteSelect">
+        <activity android:name=".RouteSelect"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity
             android:name=".RouteNavigateLaunch"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait">
             <action android:name=".ROUTE_NAVIGATE_LAUNCH" />
         </activity>
 
         <service
             android:name=".RouteNavigate"
-            android:exported="false">
+            android:exported="false"
+            >
             <action android:name=".ROUTE_NAVIGATE" />
         </service>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-        <activity android:name=".SettingsScreen"></activity>
+        <activity android:name=".SettingsScreen"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -17,9 +17,15 @@ import java.util.Arrays;
 class RoutePtr implements Parcelable{
     private final String ROUTE_DESC_NAME = "desc.mp3"; //constant for name of description file
     private final String ROUTE_SPEECH_NAME = "desc.txt";
-    private File dir; //the directory in which this route resides
-    private Uri desc; //the URI to the description MP3
+    /** the directory in which this route resides */
+    private File dir;
+    /** the URI to the description MP3 */
+    private Uri desc;
 
+    /** Construct a new RoutePtr from an abstract {@code File} path.
+     *
+     * @param d the path to the file.
+     */
     RoutePtr(File d) {
         dir = d;
         File[] files = dir.listFiles(); //directory with this route
@@ -33,12 +39,16 @@ class RoutePtr implements Parcelable{
         }
 
     }
-
+    /** Constructor for unparceling */
     private RoutePtr(File file, Uri uri) { //constructor for unparceling.
         dir = file;
         desc = uri;
     }
 
+    /** Get an array of the {@code RouteNodes} contained by this route.
+     *
+     * @return The array of {@code RouteNodes}
+     */
     public RouteNode[] getRouteNodes() {
         File[] files = dir.listFiles();
         RouteNode[] nodes = new RouteNode[files.length-1];
@@ -54,14 +64,27 @@ class RoutePtr implements Parcelable{
         return nodes;
     }
 
+    /** Get the Uri to the description of this route. Note that there is both a Java URI class and an Android Uri class.
+     *
+     * @return The description file of this route.
+     */
     public Uri getDesc() { //return the MP3 file describing this route. For convenience. No playMP3 method because I think that would hang the UI on the other end.
         return desc;
     }
 
+    /** Get the name of this route
+     *
+     * @return The name of the route
+     */
     public String getName() {
         return dir.getName();
     }
 
+    /** Concatenate an {@code ArrayList} of routes together
+     *
+     * @param routes {@code ArrayList} containing the routes to be piled together
+     * @return An array of the {@code RouteNodes} from every route in the list
+     */
     public static RouteNode[] concatRoutes(ArrayList<RoutePtr> routes) {
         ArrayList<RouteNode> nodes = new ArrayList<>();
         for(RoutePtr r : routes) {

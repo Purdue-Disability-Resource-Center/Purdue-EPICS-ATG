@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected boolean speaker_ready = false;
     protected TextView screenOption;
     protected GestureDetector gestureDetector;
-
+/** Create the app */
     @Override @TargetApi(23)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +55,23 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         screenOption.setText(getString(R.string.current_option) + screenOptions[index]);
 
     }
-
+/** Start the app */
     protected void onStart() {
         super.onStart();
     }
-
+/** Resume the app */
     protected void onResume() {
         super.onResume();
     }
-
+/** Pause the app */
     protected void onPause() {
         super.onPause();
     }
-
+/** Stop the app */
     protected void onStop() { super.onStop(); }
-
+/** Destroy the app */
     protected void onDestroy() { super.onDestroy(); }
-
+/** Receive the permissions results */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 }
         }
     }
+
+    /** Speak something
+     *
+     * @param speech the string to speak
+     */
     private void speak(String speech) {
         if(speaker_ready) {
             if(Build.VERSION.SDK_INT > 21)
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 speaker.speak(speech,TextToSpeech.QUEUE_ADD,null);
         }
     }
-
+/** Go to the next option in the menu */
     private void nextOption() {
         index++;
         if(index >= options.length)
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         screenOption.setText(getString(R.string.current_option) + screenOptions[index]);
         speak(speechStem + screenOptions[index]);
     }
-
+/** Go to the last option in the menu */
     private void backOption() {
         index--;
         if(index <= 0)
@@ -110,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         screenOption.setText(getString(R.string.current_option) + screenOptions[index]);
         speak(speechStem + screenOptions[index]);
     }
-
+/** Select the current option */
     private void selectOption() {
         startActivity(options[index]);
     }
@@ -165,8 +170,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
 }
-
+/** Fixer for the settings file. */
 class SettingsFixer extends Thread {
+    /** Do the work */
     public void run() {
         File settingsDir = new File(Environment.getExternalStorageDirectory().getPath()+ File.separator + RouteSelect.ROUTES_DIRECTORY + File.separator + "static");
         File settingsConfig = new File(settingsDir, "settings.txt");

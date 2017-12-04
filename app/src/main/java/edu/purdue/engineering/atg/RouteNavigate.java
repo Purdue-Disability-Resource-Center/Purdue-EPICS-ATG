@@ -56,7 +56,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
     public IBinder onBind(Intent intent) {
         return null; //might be bindable at some point, to return debug data
     }
-
+    /** Start the service */
     @TargetApi(16)
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent,flags,startId);
@@ -119,14 +119,15 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
 
         return START_STICKY;
     }
+    /** Stop the service */
     public void onDestroy() {
         locator.removeLocationUpdates(callback);
         wakelock.release();
     }
-
+/** Callback for receiving updates */
     private class RouteLocationCallback extends LocationCallback {
         RouteLocationCallback() {}
-
+/** When updates are received */
         @Override
         public void onLocationResult(LocationResult locationResult) {
             super.onLocationResult(locationResult);
@@ -148,7 +149,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
                 }
             }
         }
-
+/** When location availability changes */
         public void onLocationAvailability(LocationAvailability l) {
             String state;
             if(l.isLocationAvailable())
@@ -163,7 +164,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
             }
         }
     }
-
+/** Add in the static routes */
     private void addStatics(ArrayList<RoutePtr> routes) {
         File staticsDir = new File(Environment.getExternalStorageDirectory() + File.separator + RouteSelect.ROUTES_DIRECTORY + File.separator + "static");
         Scanner scanner;
@@ -178,7 +179,7 @@ public class RouteNavigate extends Service implements TextToSpeech.OnInitListene
         scanner.close();
     }
     //------------------------------- TexttoSpeech interface ---------------------------
-
+/** When the {@code TexttoSpeech} is initialized */
     public void onInit(int status) {
         if( status == TextToSpeech.SUCCESS)
             speaker_ready = true;
