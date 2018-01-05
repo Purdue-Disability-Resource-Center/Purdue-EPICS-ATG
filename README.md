@@ -10,4 +10,6 @@ Things to do
 - [x] Merge routeNavigate branch with implemented FileManager class, and media playback techniques
 - [x] Build routeMenu interface, implement it to pass intent for new routeNavigate
 - [x] Fix issue where ATG will talk over itself if user moves in/out of screen
-- [ ] Deliver the project
+- [X] Deliver the project
+
+This project is now delivered, and sits with the Purdue DRC awaiting end users. Contact Joseph Gerardot (Qwertycrackers) with questions, issues, or suggestions.
